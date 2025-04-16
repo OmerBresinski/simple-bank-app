@@ -40,6 +40,11 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     return <div>No transactions found</div>;
   }
 
+  // Filter out GLOBAL MONEY transactions
+  const filteredTransactions = transactionsData.results.filter(
+    (t: any) => !t.description?.toUpperCase().includes("GLOBAL MONEY")
+  );
+
   // Get current month's date range
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -65,17 +70,17 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   startOfCurrentWeek.setHours(0, 0, 0, 0);
 
   // Filter transactions for different time periods
-  const dailyTransactions = transactionsData.results.filter((t: any) => {
+  const dailyTransactions = filteredTransactions.filter((t: any) => {
     const transactionDate = new Date(t.timestamp);
     return t.amount < 0 && transactionDate >= startOfCurrentDay;
   });
 
-  const weeklyTransactions = transactionsData.results.filter((t: any) => {
+  const weeklyTransactions = filteredTransactions.filter((t: any) => {
     const transactionDate = new Date(t.timestamp);
     return t.amount < 0 && transactionDate >= startOfCurrentWeek;
   });
 
-  const monthlyTransactions = transactionsData.results.filter((t: any) => {
+  const monthlyTransactions = filteredTransactions.filter((t: any) => {
     const transactionDate = new Date(t.timestamp);
     return (
       t.amount < 0 &&
