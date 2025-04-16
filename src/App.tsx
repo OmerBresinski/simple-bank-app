@@ -16,11 +16,6 @@ function App() {
     string | null
   >(localStorage.getItem(TRUELAYER_ACCESS_TOKEN_KEY));
 
-  const handleTruelayerDisconnect = () => {
-    setTruelayerAccessToken(null);
-    localStorage.removeItem(TRUELAYER_ACCESS_TOKEN_KEY);
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
