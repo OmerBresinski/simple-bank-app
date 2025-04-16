@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import TransactionSummary from "./TransactionSummary";
+import { FadeLoader } from "react-spinners";
 
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, ""); // Remove trailing slash if present
 
@@ -54,11 +55,7 @@ const Transactions: React.FC<TransactionsProps> = ({ accessToken }) => {
   );
 
   if (isLoadingAccounts || isLoadingTransactions) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-dvh">
-        <div className="animate-spin rounded-full h-32 w-32 border-4 border-stone-400 mb-8" />
-      </div>
-    );
+    return <FadeLoader color="#000000" />;
   }
 
   if (!transactionsData?.results) {
