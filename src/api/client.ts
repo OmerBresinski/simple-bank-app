@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api";
+const API_BASE_URL = "https://simple-bank-server-xoy61.kinsta.app/api";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
