@@ -33,7 +33,11 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-dvh">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-stone-400 mb-8"></div>
+      </div>
+    );
   }
 
   if (!transactionsData?.results) {
