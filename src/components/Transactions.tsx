@@ -56,7 +56,7 @@ const Transactions: React.FC<TransactionsProps> = ({ accessToken }) => {
   if (isLoadingAccounts || isLoadingTransactions) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-stone-400 mb-8" />
+        <div className="animate-spin rounded-full h-32 w-32 border-4 border-stone-400 mb-8" />
       </div>
     );
   }
