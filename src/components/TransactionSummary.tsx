@@ -1,5 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import Spinner from "./Spinner";
 
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -35,7 +36,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh">
-        <div className="animate-spin rounded-full h-24 w-24 border-[3px] border-stone-400 border-t-transparent"></div>
+        <Spinner />
       </div>
     );
   }
