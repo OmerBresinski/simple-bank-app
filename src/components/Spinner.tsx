@@ -1,22 +1,16 @@
 const Spinner = () => {
   return (
     <>
-      <style>
-        {`
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
-          }
-          .spin {
-            transform-origin: center;
-            animation: spin 2s linear infinite;
-          }
-        `}
-      </style>
-      <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <svg
+        viewBox="0 0 800 800"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          transformOrigin: "center",
+          animation: "spin 2s linear infinite",
+        }}
+      >
         <circle
-          className="spin"
           cx="400"
           cy="400"
           fill="none"
