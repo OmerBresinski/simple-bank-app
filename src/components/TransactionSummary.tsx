@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "./Spinner";
+import { FadeLoader } from "react-spinners";
 
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -36,7 +36,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh">
-        <Spinner />
+        <FadeLoader color="#000000" />
       </div>
     );
   }
