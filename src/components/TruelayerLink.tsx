@@ -1,57 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, ""); // Remove trailing slash if present
+const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 interface TruelayerLinkProps {
-  onSuccess: (token: string) => void;
+  onSuccess: (accessToken: string, refreshToken: string) => void;
 }
 
-const TruelayerLink: React.FC<TruelayerLinkProps> = () => {
-  const [isConnecting, setIsConnecting] = useState(false);
+const TruelayerLink: React.FC<TruelayerLinkProps> = ({ onSuccess }) => {
+  const navigate = useNavigate();
 
   const handleConnect = async () => {
-    setIsConnecting(true);
     try {
-      const response = await fetch(`${API_URL}/api/truelayer/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // Generate a random state parameter
+      const state = Math.random().toString(36).substring(7);
+      localStorage.setItem("truelayer_state", state);
 
-      if (!response.ok) {
-        throw new Error("Failed to get Truelayer auth URL");
+      // Generate a random nonce
+      const nonce = Math.random().toString(36).substring(7);
+      localStorage.setItem("truelayer_nonce", nonce);
+
+      // Open the Truelayer authorization URL in a popup
+      const width = 600;
+      const height = 800;
+      const left = window.screen.width / 2 - width / 2;
+      const top = window.screen.height / 2 - height / 2;
+
+      const popup = window.open(
+        `${API_URL}/api/truelayer/auth?state=${state}&nonce=${nonce}`,
+        "Truelayer Auth",
+        `width=${width},height=${height},left=${left},top=${top}`
+      );
+
+      if (!popup) {
+        throw new Error("Popup blocked. Please allow popups for this site.");
       }
 
-      const data = await response.json();
+      // Listen for messages from the popup
+      const handleMessage = (event: MessageEvent) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data.type === "TRUELAYER_AUTH_SUCCESS") {
+          onSuccess(event.data.accessToken, event.data.refreshToken);
+          popup.close();
+          window.removeEventListener("message", handleMessage);
+        }
+      };
 
-      if (data.authUrl) {
-        // Store the state and nonce from the server response
-        localStorage.setItem("truelayer_state", data.state);
-        localStorage.setItem("truelayer_nonce", data.nonce);
-
-        // Redirect to Truelayer auth page
-        window.location.href = data.authUrl;
-      } else {
-        throw new Error("No auth URL received from server");
-      }
+      window.addEventListener("message", handleMessage);
     } catch (error) {
       console.error("Error connecting to Truelayer:", error);
-    } finally {
-      setIsConnecting(false);
+      navigate("/");
     }
   };
 
   return (
-    <div className="p-4">
-      <button
-        onClick={handleConnect}
-        disabled={isConnecting}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-      >
-        {isConnecting ? "Connecting..." : "Connect with Truelayer"}
-      </button>
-    </div>
+    <button
+      onClick={handleConnect}
+      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Connect to Truelayer
+    </button>
   );
 };
 

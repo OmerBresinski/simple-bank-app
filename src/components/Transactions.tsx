@@ -7,9 +7,13 @@ const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, ""); // Remove trail
 
 interface TransactionsProps {
   accessToken: string;
+  refreshToken: string;
 }
 
-const Transactions: React.FC<TransactionsProps> = ({ accessToken }) => {
+const Transactions: React.FC<TransactionsProps> = ({
+  accessToken,
+  refreshToken,
+}) => {
   const { data: accountsData, isLoading: isLoadingAccounts } = useQuery({
     queryKey: ["truelayerAccounts", accessToken],
     queryFn: async () => {
@@ -31,7 +35,7 @@ const Transactions: React.FC<TransactionsProps> = ({ accessToken }) => {
 
   const { data: transactionsData, isLoading: isLoadingTransactions } = useQuery(
     {
-      queryKey: ["truelayerTransactions", accessToken, accountId],
+      queryKey: ["truelayerTransactions", accessToken, refreshToken, accountId],
       queryFn: async () => {
         if (!accountId) return null;
 
@@ -42,6 +46,7 @@ const Transactions: React.FC<TransactionsProps> = ({ accessToken }) => {
           },
           body: JSON.stringify({
             accessToken,
+            refreshToken,
             accountId,
           }),
         });

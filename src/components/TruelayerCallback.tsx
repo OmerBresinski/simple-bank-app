@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 interface TruelayerCallbackProps {
-  onSuccess: (token: string) => void;
+  onSuccess: (accessToken: string, refreshToken: string) => void;
 }
 
 const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
@@ -52,8 +52,8 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
 
         const data = await response.json();
 
-        // Call the onSuccess callback with the access token
-        onSuccess(data.access_token);
+        // Call the onSuccess callback with both tokens
+        onSuccess(data.access_token, data.refresh_token);
 
         setStatus("success");
 
