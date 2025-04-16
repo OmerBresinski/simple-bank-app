@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, ""); // Remove trail
 interface TransactionsProps {
   accessToken: string;
   refreshToken: string;
+  onTokenUpdate: (accessToken: string, refreshToken: string) => void;
 }
 
 const Transactions: React.FC<TransactionsProps> = ({

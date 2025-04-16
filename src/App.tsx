@@ -8,10 +8,6 @@ import "./App.css";
 
 const queryClient = new QueryClient();
 
-// Constants for localStorage keys
-const TRUELAYER_ACCESS_TOKEN_KEY = "truelayerAccessToken";
-const TRUELAYER_REFRESH_TOKEN_KEY = "truelayerRefreshToken";
-
 function App() {
   const [truelayerAccessToken, setTruelayerAccessToken] = useState<
     string | null
@@ -64,7 +60,7 @@ function App() {
                   </div>
                 )}
 
-                {truelayerAccessToken && (
+                {truelayerAccessToken && truelayerRefreshToken && (
                   <div className="h-full">
                     <Transactions
                       accessToken={truelayerAccessToken}
