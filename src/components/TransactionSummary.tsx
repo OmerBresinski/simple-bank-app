@@ -36,7 +36,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh">
-        <FadeLoader color="#000000" />
+        <FadeLoader color="#a8a29e" />
       </div>
     );
   }
