@@ -20,6 +20,21 @@ const TruelayerLink: React.FC<TruelayerLinkProps> = ({ onSuccess }) => {
       const nonce = Math.random().toString(36).substring(7);
       localStorage.setItem("truelayer_nonce", nonce);
 
+      // Get the auth URL from the backend
+      const response = await fetch(`${API_URL}/api/truelayer/auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ state, nonce }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get auth URL");
+      }
+
+      const { authUrl } = await response.json();
+
       // Open the Truelayer authorization URL in a popup
       const width = 600;
       const height = 800;
@@ -27,7 +42,7 @@ const TruelayerLink: React.FC<TruelayerLinkProps> = ({ onSuccess }) => {
       const top = window.screen.height / 2 - height / 2;
 
       const popup = window.open(
-        `${API_URL}/api/truelayer/auth?state=${state}&nonce=${nonce}`,
+        authUrl,
         "Truelayer Auth",
         `width=${width},height=${height},left=${left},top=${top}`
       );
