@@ -55,7 +55,11 @@ const Transactions: React.FC<TransactionsProps> = ({ accessToken }) => {
   );
 
   if (isLoadingAccounts || isLoadingTransactions) {
-    return <FadeLoader color="#000000" />;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-dvh">
+        <FadeLoader color="#000000" />
+      </div>
+    );
   }
 
   if (!transactionsData?.results) {
