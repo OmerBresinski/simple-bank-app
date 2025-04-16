@@ -35,7 +35,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-stone-400 mb-8"></div>
+        <div className="animate-spin rounded-full h-24 w-24 border-[3px] border-stone-400 border-t-transparent"></div>
       </div>
     );
   }
