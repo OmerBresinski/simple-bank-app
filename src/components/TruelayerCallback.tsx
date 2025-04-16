@@ -25,9 +25,8 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
         // Verify state matches what we stored
         const storedState = localStorage.getItem("truelayer_state");
         if (!storedState || state !== storedState) {
-          // If state doesn't match, redirect to home without showing error
-          console.warn("State parameter mismatch, redirecting to home");
-          navigate("/");
+          console.warn("State parameter mismatch");
+          window.close();
           return;
         }
 
@@ -53,8 +52,13 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
 
         const data = await response.json();
 
-        // Call the onSuccess callback with the access token
-        onSuccess(data.access_token);
+        // Store the token in localStorage of the opener window
+        if (window.opener) {
+          window.opener.postMessage(
+            { type: "TRUELAYER_AUTH_SUCCESS", token: data.access_token },
+            window.location.origin
+          );
+        }
 
         setStatus("success");
 
@@ -62,16 +66,19 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
         localStorage.removeItem("truelayer_state");
         localStorage.removeItem("truelayer_nonce");
 
-        // Redirect to the main page after a short delay
+        // Close the popup after a short delay
         setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          window.close();
+        }, 1000);
       } catch (error) {
         console.error("Error in Truelayer callback:", error);
         setStatus("error");
         setError(
           error instanceof Error ? error.message : "An unknown error occurred"
         );
+        setTimeout(() => {
+          window.close();
+        }, 2000);
       }
     };
 
@@ -98,7 +105,7 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
               Successfully Connected!
             </h2>
             <p className="text-gray-600">
-              Redirecting you back to the dashboard...
+              This window will close automatically...
             </p>
           </div>
         )}
@@ -109,12 +116,9 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
               Connection Failed
             </h2>
             <p className="text-gray-600">{error}</p>
-            <button
-              onClick={() => navigate("/")}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Return to Dashboard
-            </button>
+            <p className="text-gray-600 mt-2">
+              This window will close automatically...
+            </p>
           </div>
         )}
       </div>

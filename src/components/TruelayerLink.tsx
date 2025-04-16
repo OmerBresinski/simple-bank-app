@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, ""); // Remove trailing slash if present
 
-const TruelayerLink: React.FC = () => {
+interface TruelayerLinkProps {
+  onSuccess: (token: string) => void;
+}
+
+const TruelayerLink: React.FC<TruelayerLinkProps> = ({ onSuccess }) => {
   const [isConnecting, setIsConnecting] = useState(false);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data.type === "TRUELAYER_AUTH_SUCCESS") {
+        onSuccess(event.data.token);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [onSuccess]);
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -26,17 +43,22 @@ const TruelayerLink: React.FC = () => {
         localStorage.setItem("truelayer_state", data.state);
         localStorage.setItem("truelayer_nonce", data.nonce);
 
-        // Log the auth URL for debugging
-        console.log("Redirecting to Truelayer auth URL:", data.authUrl);
+        // Open Truelayer auth in a popup window
+        const width = 600;
+        const height = 700;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
 
-        // Redirect to Truelayer auth page
-        window.location.href = data.authUrl;
+        window.open(
+          data.authUrl,
+          "Truelayer Auth",
+          `width=${width},height=${height},left=${left},top=${top}`
+        );
       } else {
         throw new Error("No auth URL received from server");
       }
     } catch (error) {
       console.error("Error connecting to Truelayer:", error);
-      // You might want to show an error message to the user here
     } finally {
       setIsConnecting(false);
     }

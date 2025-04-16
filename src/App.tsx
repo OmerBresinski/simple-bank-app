@@ -38,7 +38,12 @@ function App() {
                 {!truelayerAccessToken && (
                   <div className="space-y-4">
                     <h1 className="text-3xl font-bold mb-8">Simple Bank</h1>
-                    <TruelayerLink />
+                    <TruelayerLink
+                      onSuccess={(token) => {
+                        setTruelayerAccessToken(token);
+                        localStorage.setItem(TRUELAYER_ACCESS_TOKEN_KEY, token);
+                      }}
+                    />
                   </div>
                 )}
 
