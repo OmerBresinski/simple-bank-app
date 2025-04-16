@@ -102,13 +102,13 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center min-h-dvh">
-      <div className="text-4xl font-bold text-stone-400 mb-8">
+      <div className="text-6xl font-bold text-stone-400 mb-8">
         £{dailySum.toFixed(2)}d
       </div>
-      <div className="text-4xl font-bold text-stone-400 mb-8">
+      <div className="text-6xl font-bold text-stone-400 mb-8">
         £{weeklySum.toFixed(2)}w
       </div>
-      <div className="text-4xl font-bold text-stone-400">
+      <div className="text-6xl font-bold text-stone-400">
         £{monthlySum.toFixed(2)}m
       </div>
     </div>
