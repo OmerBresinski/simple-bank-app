@@ -6,7 +6,7 @@ interface TruelayerLinkProps {
   onSuccess: (token: string) => void;
 }
 
-const TruelayerLink: React.FC<TruelayerLinkProps> = ({ onSuccess }) => {
+const TruelayerLink: React.FC<TruelayerLinkProps> = () => {
   const [isConnecting, setIsConnecting] = useState(false);
 
   const handleConnect = async () => {
