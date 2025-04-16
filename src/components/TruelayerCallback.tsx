@@ -78,7 +78,7 @@ const TruelayerCallback: React.FC<TruelayerCallbackProps> = ({ onSuccess }) => {
   }, [navigate, onSuccess]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-dvh bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
         {status === "processing" && (
           <div className="text-center">
